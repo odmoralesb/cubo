@@ -32,8 +32,6 @@ class Contenido extends Component {
                                         type="number" 
                                         className="form-control" 
                                         placeholder="Introduzca el numero de casos" 
-                                        aria-label="numero_casos" 
-                                        aria-describedby="basic-addon1"
                                         value={cubo.get('numero_casos')||''}
                                         onChange={(e) => this.props.updateInputs('numero_casos', e.target.value) }
                                     />
@@ -50,14 +48,8 @@ class Contenido extends Component {
                 <Card className="sep">
                     <Card.Body>
                         <div className="row">
-
-                            <div className="col-md-2">
-                                <button type="button" class="btn btn-primary" disabled>
-                                    Caso actual <span class="badge badge-light">{cubo.get('caso_actual')}</span>
-                                </button>
-                            </div>
                             
-                            <div className="col-md-2">
+                            <div className="col-md-3">
                                 <div className="input-group">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">N</span>
@@ -66,15 +58,13 @@ class Contenido extends Component {
                                         type="number" 
                                         className="form-control" 
                                         placeholder="Dimension" 
-                                        aria-label="numero_casos" 
-                                        aria-describedby="basic-addon1"
                                         value={cubo.get('dimension')||''}
                                         onChange={(e) => this.props.updateInputs('dimension', e.target.value) }
                                     />
                                 </div>
                             </div>
 
-                            <div className="col-md-2">
+                            <div className="col-md-3">
                                 <div className="input-group">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">M</span>
@@ -83,8 +73,6 @@ class Contenido extends Component {
                                         type="number" 
                                         className="form-control" 
                                         placeholder="Operaciones" 
-                                        aria-label="numero_casos" 
-                                        aria-describedby="basic-addon1"
                                         value={cubo.get('operaciones')||''}
                                         onChange={(e) => this.props.updateInputs('operaciones', e.target.value) }
                                     />
@@ -92,7 +80,9 @@ class Contenido extends Component {
                             </div>
 
                             <div className="col-md-2">
-                                <button type="button" class="btn btn-primary">Aceptar</button>
+                                <button type="button" class="btn btn-primary">
+                                    Aceptar <span class="badge badge-light">{cubo.get('caso_actual')}</span>
+                                </button>
                             </div>
 
 
@@ -107,8 +97,14 @@ class Contenido extends Component {
                         <div className="row">
                             <div className="col-md-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked />
-                                    <label class="form-check-label" for="exampleRadios1">
+                                    <input 
+                                        class="form-check-input" 
+                                        id="op_update" 
+                                        type="radio" 
+                                        checked={cubo.get('tipo_operacion')==='UPDATE'} 
+                                        onClick={ () => this.props.updateInputs('tipo_operacion', 'UPDATE') } 
+                                    />
+                                    <label class="form-check-label" for="op_update">
                                         UPDATE
                                     </label>
                                 </div>
@@ -122,6 +118,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('x')||''}
+                                        onChange={(e) => this.props.updateInputs('x', e.target.value) }
                                     />
                                 </div>                                
                             </div>
@@ -134,6 +132,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('y')||''}
+                                        onChange={(e) => this.props.updateInputs('y', e.target.value) }
                                     />
                                 </div>                                
                             </div>
@@ -146,6 +146,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('z')||''}
+                                        onChange={(e) => this.props.updateInputs('z', e.target.value) }
                                     />
                                 </div>                                
                             </div> 
@@ -159,6 +161,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('W')||''}
+                                        onChange={(e) => this.props.updateInputs('W', e.target.value) }
                                     />
                                 </div>                                
                             </div>  
@@ -172,8 +176,15 @@ class Contenido extends Component {
 
                             <div className="col-md-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked />
-                                    <label class="form-check-label" for="exampleRadios2">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="radio"
+                                        id="op_query" 
+                                        type="radio" 
+                                        checked={cubo.get('tipo_operacion')==='QUERY'} 
+                                        onClick={ () => this.props.updateInputs('tipo_operacion', 'QUERY') } 
+                                    />
+                                    <label class="form-check-label" for="op_query">
                                         QUERY
                                     </label>
                                 </div>
@@ -188,6 +199,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('x1')||''}
+                                        onChange={(e) => this.props.updateInputs('x1', e.target.value) }
                                     />
                                 </div>                                
                             </div>
@@ -200,6 +213,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('y1')||''}
+                                        onChange={(e) => this.props.updateInputs('y1', e.target.value) }
                                     />
                                 </div>                                
                             </div>
@@ -212,6 +227,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('z1')||''}
+                                        onChange={(e) => this.props.updateInputs('z1', e.target.value) }
                                     />
                                 </div>                                
                             </div>
@@ -230,6 +247,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('x2')||''}
+                                        onChange={(e) => this.props.updateInputs('x2', e.target.value) }
                                     />
                                 </div>                                
                             </div>
@@ -243,6 +262,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('y2')||''}
+                                        onChange={(e) => this.props.updateInputs('y2', e.target.value) }
                                     />
                                 </div>                                
                             </div>
@@ -256,6 +277,8 @@ class Contenido extends Component {
                                     <input 
                                         type="number" 
                                         className="form-control" 
+                                        value={cubo.get('z2')||''}
+                                        onChange={(e) => this.props.updateInputs('z2', e.target.value) }
                                     />
                                 </div>                                
                             </div>
