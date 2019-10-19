@@ -1,0 +1,14 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/cubo-front/node_modules
+
+# testing
+/coverage
+
+# production
+/cubo-front/build
+
+/cubo-front/npm-debug.log*
+/cubo-front/yarn-debug.log*
+/cubo-front/yarn-error.log*

@@ -1,0 +1,2 @@
+
+export const MODIFICAR_INPUTS ='MODIFICAR_INPUTS'

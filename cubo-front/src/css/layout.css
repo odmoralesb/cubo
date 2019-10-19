@@ -1,0 +1,16 @@
+.titulo {
+    background-color: darkblue;
+    font-size: 18px;
+    padding: 15px;
+    color: white;
+}
+
+.contenido {
+    padding: 12px;
+    font-size: 18px;
+}
+
+
+.sep {
+    margin-top: 10px
+}
