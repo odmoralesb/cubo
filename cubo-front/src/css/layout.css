@@ -14,3 +14,7 @@
 .sep {
     margin-top: 10px
 }
+
+button.font-btn {
+    font-size: 12px;
+}
