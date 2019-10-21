@@ -47,31 +47,35 @@ export function ejecutarUpdate() {
 		const { x, y, z, W } = getState().cubo.toJS()	
 
 		const fn0 = (d) => d({ 
-			type: types.EJECUTAR_UPDATE, 
+			type: types.EJECUTAR_OPERACION, 
 			payload: {
 				operacion: 'UPDATE',
 				x, y, z, W
 			} 
 		})
-
-		
 		
 		const fn1 = (d) => d({ type: types.ESCRIBIR_ENTRADA })		
 		
 		fn0(dispatch)
 		fn1(dispatch)
-		
-	
-
-
 	}
 }
 
 
 export function ejecutarQuery() {
-	return (dispatch) => {
 
-		const fn0 = (d) => d({ type: types.EJECUTAR_QUERY })
+	return (dispatch, getState) => {
+
+		const { x1, y1, z1, x2, y2, z2 } = getState().cubo.toJS()
+
+		const fn0 = (d) => d({ 
+			type: types.EJECUTAR_OPERACION, 
+			payload: {
+				operacion: 'QUERY',
+				x1, y1, z1, x2, y2, z2
+			} 
+		})
+
 		const fn1 = (d) => d({ type: types.ESCRIBIR_ENTRADA })		
 
 		fn0(dispatch)

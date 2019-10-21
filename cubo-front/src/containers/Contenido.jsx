@@ -49,7 +49,7 @@ class Contenido extends Component {
 
     handle_update = () => {
 
-        const { x, y, z, W } = this.props.cubo.toJS()
+        const { x, y, z } = this.props.cubo.toJS()
 
         if (x > 0 && y > 0 && z > 0) {
             this.props.ejecutarUpdate()
@@ -61,6 +61,7 @@ class Contenido extends Component {
 
     handle_query = () => {
 
+        this.props.ejecutarQuery()
 
     }
 
@@ -424,6 +425,7 @@ class Contenido extends Component {
                                                 className="btn btn-primary font-btn" 
                                                 style={{width:'100%'}} 
                                                 disabled={cubo.get('operacion_deshabilitada')}
+                                                onClick = { () => this.handle_query() }
                                             >
                                                 QUERY
                                             </button>
