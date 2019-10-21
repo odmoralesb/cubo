@@ -2,6 +2,8 @@ import { createAxiosInstance } from '../utils/helpers'
 
 import * as types from './types'
 
+
+
 export function updateInputs(path, value) {
 	return (dispatch) => {
         const fn0 = (d) => d({ type: types.MODIFICAR_INPUTS, payload: { path, value } })
@@ -10,10 +12,45 @@ export function updateInputs(path, value) {
 }
 
 
-export function inicializarCubo() {
+export function levantarExepcion(mensaje) {
 	return (dispatch) => {
-        const fn0 = (d) => d({ type: types.INICIALIZAR_CUBO })
+        const fn0 = (d) => d({ type: types.LEVANTAR_EXEPCION, payload: { mensaje } })
 		fn0(dispatch)
+	}
+}
+
+
+// export function inicializarCubo() {
+// 	return (dispatch) => {
+//         const fn0 = (d) => d({ type: types.INICIALIZAR_CUBO })
+// 		fn0(dispatch)
+// 	}
+// }
+
+
+
+export function inicializarCubo() {
+	return (dispatch, getState) => {
+
+		const { numero_casos} = getState().cubo.toJS()
+
+		if (numero_casos < 0) { 
+
+			dispatch(updateInputs('caso_deshabilitado', true))
+
+		} else if (numero_casos > 50) {
+
+			dispatch(updateInputs('caso_deshabilitado', true))
+
+
+		} else {
+			dispatch({ type: types.INICIALIZAR_CUBO })
+			dispatch(escribirEntrada())
+		}
+
+
+
+
 	}
 }
 
@@ -90,11 +127,7 @@ export function ejecutarQuery() {
 
 export function escribirEntrada() {
 	return (dispatch) => {
-
         const fn0 = (d) => d({ type: types.ESCRIBIR_ENTRADA })
 		fn0(dispatch)
-
-
-
 	}
 }

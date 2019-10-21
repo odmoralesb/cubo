@@ -17,7 +17,8 @@ const INITIAL_STATE = Immutable.fromJS({
     entrada: {
         casos: []
     },
-    entrada_txt: null
+    entrada_txt: null,
+    error: null
 })
 
 export default function (state = INITIAL_STATE, action) {
@@ -30,6 +31,8 @@ export default function (state = INITIAL_STATE, action) {
                 return state
 
         case types.INICIALIZAR_CUBO:
+
+                state = state.set('caso_deshabilitado', false)
 
                 state = state.set('cubo', INITIAL_STATE.get('cubo'))
 

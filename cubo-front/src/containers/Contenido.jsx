@@ -20,18 +20,24 @@ import {
 class Contenido extends Component {
 
 
-    handle_aceptar_casos = () => {
+    // handle_aceptar_casos = () => {
 
-        this.props.inicializarCubo()        
+    //     this.props.inicializarCubo()        
 
-        if (this.props.cubo.get('numero_casos') > 0) {
-            this.props.updateInputs('caso_deshabilitado', false)
-            this.props.escribirEntrada()
-        } else {
-            this.props.updateInputs('caso_deshabilitado', true)
+    //     if (this.props.cubo.get('numero_casos') > 0) {
+    //         this.props.updateInputs('caso_deshabilitado', false)
+    //         this.props.escribirEntrada()
+    //     } else {
+    //         this.props.updateInputs('caso_deshabilitado', true)
             
-        }
+    //     }
+    // }
+
+
+    handle_aceptar_casos = () => {
+        this.props.inicializarCubo()
     }
+
 
 
     handle_abrir_caso = () => {
