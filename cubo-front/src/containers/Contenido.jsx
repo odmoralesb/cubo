@@ -8,7 +8,11 @@ import {
 import { 
     updateInputs,
     inicializarCubo,
-    inicializarOperaciones
+    inicializarOperaciones,
+    escribirEntrada,
+    abrirCaso,
+    ejecutarUpdate,
+    ejecutarQuery
 } from '../actions/cubo'
 
 
@@ -22,6 +26,7 @@ class Contenido extends Component {
 
         if (this.props.cubo.get('numero_casos') > 0) {
             this.props.updateInputs('caso_deshabilitado', false)
+            this.props.escribirEntrada()
         } else {
             this.props.updateInputs('caso_deshabilitado', true)
             
@@ -34,18 +39,30 @@ class Contenido extends Component {
         this.props.inicializarOperaciones()
 
         if ((this.props.cubo.get('dimension') > 0) && (this.props.cubo.get('operaciones') > 0)) {
-            this.props.updateInputs('operacion_deshabilitada', false)
+            this.props.abrirCaso()
         } else {
-            this.props.updateInputs('operacion_deshabilitada', true)
-            
+            this.props.updateInputs('operacion_deshabilitada', true)            
+        }
+
+    }
+
+
+    handle_update = () => {
+
+        const { x, y, z, W } = this.props.cubo.toJS()
+
+        if (x > 0 && y > 0 && z > 0) {
+            this.props.ejecutarUpdate()
         }
 
 
     }
 
 
+    handle_query = () => {
 
 
+    }
 
 
 	render() {
@@ -79,7 +96,7 @@ class Contenido extends Component {
                                     <div className="col-md-2">
                                         <button 
                                             type="button" 
-                                            class="btn btn-primary font-btn" 
+                                            className="btn btn-primary font-btn" 
                                             style={{width:'100%'}}
                                             onClick={() => this.handle_aceptar_casos() }
                                         >
@@ -129,12 +146,12 @@ class Contenido extends Component {
                                     <div className="col-md-2">
                                         <button 
                                             type="button" 
-                                            class="btn btn-primary font-btn" 
+                                            className="btn btn-primary font-btn" 
                                             style={{width:'100%'}} disabled={cubo.get('caso_deshabilitado')} 
                                             onClick={() => this.handle_abrir_caso() }
                                         >
                                             Caso&nbsp;&nbsp;
-                                            <span class="badge badge-light">{cubo.get('caso_actual')}</span>
+                                            <span className="badge badge-light">{cubo.get('caso_actual')}</span>
                                         </button>
                                     </div>
 
@@ -149,25 +166,25 @@ class Contenido extends Component {
                                 <div className="row sep">
 
                                     <div className="col-md-2">
-                                        <div class="form-check">
+                                        <div className="form-check">
                                             <input 
-                                                class="form-check-input" 
+                                                className="form-check-input" 
                                                 id="op_update" 
                                                 type="radio" 
                                                 checked={cubo.get('tipo_operacion')==='UPDATE'} 
                                                 onClick={ () => this.props.updateInputs('tipo_operacion', 'UPDATE') }
                                                 disabled={cubo.get('operacion_deshabilitada')}
                                             />
-                                            <label class="form-check-label" for="op_update">
+                                            <label className="form-check-label" htmlFor="op_update">
                                                 UPDATE
                                             </label>
                                         </div>
                                     </div>
 
                                     <div className="col-md-2">
-                                        <div class="form-check">
+                                        <div className="form-check">
                                             <input 
-                                                class="form-check-input" 
+                                                className="form-check-input" 
                                                 type="radio"
                                                 id="op_query" 
                                                 type="radio" 
@@ -175,7 +192,7 @@ class Contenido extends Component {
                                                 onClick={ () => this.props.updateInputs('tipo_operacion', 'QUERY') } 
                                                 disabled={cubo.get('operacion_deshabilitada')}
                                             />
-                                            <label class="form-check-label" for="op_query">
+                                            <label className="form-check-label" htmlFor="op_query">
                                                 QUERY
                                             </label>
                                         </div>
@@ -266,9 +283,10 @@ class Contenido extends Component {
                                         <div className="col-md-2">
                                             <button 
                                                 type="button" 
-                                                class="btn btn-primary font-btn" 
+                                                className="btn btn-primary font-btn" 
                                                 style={{width:'100%'}} 
                                                 disabled={cubo.get('operacion_deshabilitada')}
+                                                onClick = { () => this.handle_update() }
                                             >
                                                 UPDATE
                                             </button>
@@ -403,7 +421,7 @@ class Contenido extends Component {
                                         <div className="col-md-2">
                                             <button 
                                                 type="button" 
-                                                class="btn btn-primary font-btn" 
+                                                className="btn btn-primary font-btn" 
                                                 style={{width:'100%'}} 
                                                 disabled={cubo.get('operacion_deshabilitada')}
                                             >
@@ -426,7 +444,7 @@ class Contenido extends Component {
                         <Card>
                             <Card.Header>Entrada</Card.Header>
                             <Card.Body>
-                                <textarea rows={12} style={{width:'100%'}} />
+                                <textarea rows={12} style={{width:'100%'}} value={ cubo.get('entrada_txt') || '' } readOnly />
                             </Card.Body>
                         </Card>    
 
@@ -462,7 +480,11 @@ function mapDispatchToProps(dispatch) {
     return {
         updateInputs: (path, value) => dispatch(updateInputs(path, value)),
         inicializarCubo: () => dispatch(inicializarCubo()),
-        inicializarOperaciones: () => dispatch(inicializarOperaciones())
+        inicializarOperaciones: () => dispatch(inicializarOperaciones()),
+        escribirEntrada: () => dispatch(escribirEntrada()),
+        abrirCaso: () => dispatch(abrirCaso()),
+        ejecutarUpdate: () => dispatch(ejecutarUpdate()),
+        ejecutarQuery: () => dispatch(ejecutarQuery())
     }
 }
 
