@@ -124,7 +124,6 @@ export default function (state = INITIAL_STATE, action) {
 
                 txt += state.get('numero_casos') + '\r\n'
 
-
                 state.getIn(['entrada', 'casos']).map(caso => {
 
                         txt += `${caso.get('N')} ${caso.get('M')}` + '\r\n'
@@ -137,17 +136,12 @@ export default function (state = INITIAL_STATE, action) {
                                                 txt += `UPDATE ${linea.get('x')} ${linea.get('y')} ${linea.get('z')} ${linea.get('W')}` + '\r\n'
                                         break
                                 }
-
-
                         })
                 })
                 
                 state = state.set('entrada_txt', txt)
 
                 return state
-
-
-
 
         default:
             return state
