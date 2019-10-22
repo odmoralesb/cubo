@@ -33,10 +33,10 @@ export default function (state = INITIAL_STATE, action) {
         case types.INICIALIZAR_CUBO:
 
                 state = state.set('caso_deshabilitado', false)
+                
+                state = state.set('caso_actual', 1)
 
                 state = state.set('cubo', INITIAL_STATE.get('cubo'))
-
-                state = state.set('caso_actual', 1)
 
                 state = state.setIn(['entrada', 'casos'], Immutable.fromJS([]))
 
@@ -63,6 +63,8 @@ export default function (state = INITIAL_STATE, action) {
                 state = state.set('operacion_deshabilitada', INITIAL_STATE.get('operacion_deshabilitada'))  
                 
                 state = state.set('tipo_operacion', INITIAL_STATE.get('tipo_operacion')) 
+
+                state = state.set('entrada_txt', INITIAL_STATE.get('entrada_txt'))
 
                 return state
 
@@ -145,7 +147,10 @@ export default function (state = INITIAL_STATE, action) {
 
                 return state
 
+
+
+
         default:
-            return state
+                return state
     }
 }

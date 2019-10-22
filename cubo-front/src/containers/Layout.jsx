@@ -5,57 +5,43 @@ import { toast } from 'react-toastify'
 
 
 
+import { 
+    limpiarMensaje
+} from '../actions/layout'
+
+
+
 
 class Layout extends Component {
 
-    constructor(props) {
-        super(props)
 
-        this.state = {
-
-        }
-    }
-    componentWillMount() {
-
-    }
-
-    componentDidMount() {
-
-    }
-
-    componentWillUnmount() {
-
-    }
-
-    componentWillUpdate(nextProps) {
-
-    }
 
     componentDidUpdate() {
-        this.props.clearMessage()
+        this.props.limpiarMensaje()
     }
 
 
 
 	render() {
 
-        if (this.props.message) {
+        if (this.props.mensaje) {
 
-            const { message } = this.props
+            const { mensaje } = this.props
 
-            switch (message.get('type')) {
+            switch (mensaje.get('tipo')) {
                 case 'danger':
-                    toast.error(message.get('message'), { bodyClassName: 'toastify-content toastify-danger' })
+                    toast.error(mensaje.get('descripcion'), { bodyClassName: 'toastify-content toastify-danger' })
                     break
                 case 'warning':
-                    toast.warn(message.get('message'), { bodyClassName: 'toastify-content toastify-warning' })
+                    toast.warn(mensaje.get('descripcion'), { bodyClassName: 'toastify-content toastify-warning' })
                     break
                 case 'success':
-                    toast.success(message.get('message'), { bodyClassName: 'toastify-content toastify-success' })
+                    toast.success(mensaje.get('descripcion'), { bodyClassName: 'toastify-content toastify-success' })
                     break
                 default:
-                    toast.info(message.get('message'), { bodyClassName: 'toastify-content toastify-info' })
+                    toast.info(mensaje.get('descripcion'), { bodyClassName: 'toastify-content toastify-info' })
             }
+            
         }
 
 		return (
@@ -71,13 +57,13 @@ class Layout extends Component {
 
 function mapStateToProps(state) {
     return {
-        //message: state.common.get('message'),
+        mensaje: state.layout.get('mensaje'),
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        //clearMessage: () => dispatch(clearMessage()),
+        limpiarMensaje: () => dispatch(limpiarMensaje()),
     }
 }
 

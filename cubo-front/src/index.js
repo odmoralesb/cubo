@@ -8,10 +8,14 @@ import { ToastContainer } from 'react-toastify'
 import history from './utils/history'
 import store from './utils/store'
 
+import './css/font-awesome.min.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.min.css'
+
 import './css/custom-toastify.css'
 import './css/layout.css'
+
 
 
 
