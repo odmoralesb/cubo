@@ -17,7 +17,8 @@ const INITIAL_STATE = Immutable.fromJS({
     entrada: {
         casos: []
     },
-    entrada_txt: null
+    entrada_txt: null,
+    error: null
 })
 
 export default function (state = INITIAL_STATE, action) {
@@ -30,6 +31,8 @@ export default function (state = INITIAL_STATE, action) {
                 return state
 
         case types.INICIALIZAR_CUBO:
+
+                state = state.set('caso_deshabilitado', false)
 
                 state = state.set('cubo', INITIAL_STATE.get('cubo'))
 
@@ -97,7 +100,7 @@ export default function (state = INITIAL_STATE, action) {
                 return state
 
 
-        case types.EJECUTAR_UPDATE:
+        case types.EJECUTAR_OPERACION:
 
                 const operacion = Immutable.fromJS(action.payload)
 
@@ -110,11 +113,6 @@ export default function (state = INITIAL_STATE, action) {
                 return state
 
 
-
-        case types.EJECUTAR_QUERY:
-
-
-                return state
 
 
 
@@ -134,6 +132,10 @@ export default function (state = INITIAL_STATE, action) {
 
                                         case 'UPDATE':
                                                 txt += `UPDATE ${linea.get('x')} ${linea.get('y')} ${linea.get('z')} ${linea.get('W')}` + '\r\n'
+                                        break
+
+                                        case 'QUERY':
+                                                txt += `QUERY ${linea.get('x1')} ${linea.get('y1')} ${linea.get('z1')} ${linea.get('x2')} ${linea.get('y2')} ${linea.get('z2')}` + '\r\n'
                                         break
                                 }
                         })
