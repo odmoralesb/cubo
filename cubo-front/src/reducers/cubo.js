@@ -23,6 +23,8 @@ const INITIAL_STATE = Immutable.fromJS({
 
 export default function (state = INITIAL_STATE, action) {
 
+    let index
+
     switch (action.type) {
 
 
@@ -71,6 +73,11 @@ export default function (state = INITIAL_STATE, action) {
 
         case types.INICIALIZAR_OPERACIONES:
 
+                index = (state.get('caso_actual')-1)
+
+                
+
+
                 state = state
                         .set('x', INITIAL_STATE.get('x'))
                         .set('y', INITIAL_STATE.get('y'))
@@ -93,7 +100,7 @@ export default function (state = INITIAL_STATE, action) {
 
         case types.ABRIR_CASO:
 
-                const index = (Number(state.get('caso_actual'))-1)
+                index = (Number(state.get('caso_actual'))-1)
                 state = state.set('operacion_deshabilitada', false)
                 state = state.setIn(['entrada', 'casos', index, 'N'], Number(state.get('dimension')))
                 state = state.setIn(['entrada', 'casos', index, 'M'], Number(state.get('operaciones')))

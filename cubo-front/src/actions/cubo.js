@@ -21,24 +21,68 @@ export function inicializarCubo() {
 
 		dispatch({ type: types.INICIALIZAR_CUBO })
 
-		if (numero_casos <= 0) { 
+		if (numero_casos < 1) { 
 			dispatch(updateInputs('caso_deshabilitado', true))
 			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'El numero de casos debe ser mayor de 0'})
-		} else if (numero_casos > 50) {
+			return
+		} 
+		
+		if (numero_casos > 50) {
 			dispatch(updateInputs('caso_deshabilitado', true))
 			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'El numero de casos no debe ser mayor de 50'})
-		} else {			
-			dispatch(escribirEntrada())
+			return
 		}
-
+		
+		dispatch(escribirEntrada())
 	}
 }
 
-
+/* 
 export function inicializarOperaciones() {
 	return (dispatch) => {
         const fn0 = (d) => d({ type: types.INICIALIZAR_OPERACIONES })
 		fn0(dispatch)
+	}
+}
+ */
+
+
+export function inicializarOperaciones() {
+	return (dispatch, getState) => {
+
+		const { dimension, operaciones } = getState().cubo.toJS()	
+
+		dispatch({type: types.INICIALIZAR_OPERACIONES})
+
+		if (dimension < 1) {
+			dispatch(updateInputs('operacion_deshabilitada', true))
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'La dimension debe ser mayor de 0'})
+			return
+		}
+
+		if (dimension > 100) {
+			dispatch(updateInputs('operacion_deshabilitada', true))
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'La dimension no debe ser mayor de 100'})
+			return			
+		}
+
+
+		if (operaciones < 1) {
+			dispatch(updateInputs('operacion_deshabilitada', true))
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'Las operaciones deben ser mayor de 0'})
+			return
+		}
+
+		if (operaciones > 1000) {
+			dispatch(updateInputs('operacion_deshabilitada', true))
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'Las operaciones no deben ser mayor de 1000'})
+			return			
+		}
+
+		dispatch(escribirEntrada())
+
+
+
 	}
 }
 
