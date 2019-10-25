@@ -9,8 +9,6 @@ import {
     updateInputs,
     inicializarCubo,
     inicializarOperaciones,
-    escribirEntrada,
-    abrirCaso,
     ejecutarUpdate,
     ejecutarQuery
 } from '../actions/cubo'
@@ -19,36 +17,8 @@ import {
 
 class Contenido extends Component {
 
-
-    handle_abrir_caso = () => {
-
-        this.props.inicializarOperaciones()
-
-        if ((this.props.cubo.get('dimension') > 0) && (this.props.cubo.get('operaciones') > 0)) {
-            this.props.abrirCaso()
-        } else {
-            this.props.updateInputs('operacion_deshabilitada', true)            
-        }
-
-    }
-
-
-    handle_update = () => {
-
-        const { x, y, z } = this.props.cubo.toJS()
-
-        if (x > 0 && y > 0 && z > 0) {
-            this.props.ejecutarUpdate()
-        }
-
-
-    }
-
-
     handle_query = () => {
-
         this.props.ejecutarQuery()
-
     }
 
 
@@ -135,7 +105,7 @@ class Contenido extends Component {
                                             type="button" 
                                             className="btn btn-primary font-btn" 
                                             style={{width:'100%'}} disabled={cubo.get('caso_deshabilitado')} 
-                                            onClick={() => this.handle_abrir_caso() }
+                                            onClick={() => this.props.inicializarOperaciones() }
                                         >
                                             Caso&nbsp;&nbsp;
                                             <span className="badge badge-light">{cubo.get('caso_actual')}</span>
@@ -273,7 +243,7 @@ class Contenido extends Component {
                                                 className="btn btn-primary font-btn" 
                                                 style={{width:'100%'}} 
                                                 disabled={cubo.get('operacion_deshabilitada')}
-                                                onClick = { () => this.handle_update() }
+                                                onClick = { () => this.props.ejecutarUpdate() }
                                             >
                                                 UPDATE
                                             </button>
@@ -469,8 +439,6 @@ function mapDispatchToProps(dispatch) {
         updateInputs: (path, value) => dispatch(updateInputs(path, value)),
         inicializarCubo: () => dispatch(inicializarCubo()),
         inicializarOperaciones: () => dispatch(inicializarOperaciones()),
-        escribirEntrada: () => dispatch(escribirEntrada()),
-        abrirCaso: () => dispatch(abrirCaso()),
         ejecutarUpdate: () => dispatch(ejecutarUpdate()),
         ejecutarQuery: () => dispatch(ejecutarQuery())
     }

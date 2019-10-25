@@ -73,9 +73,9 @@ export default function (state = INITIAL_STATE, action) {
 
         case types.INICIALIZAR_OPERACIONES:
 
-                index = (state.get('caso_actual')-1)
-
-                
+                let casos = state.getIn(['entrada', 'casos']).toJS()
+                casos = casos.splice(state.get('caso_actual'))
+                state = state.setIn(['entrada', 'casos'], Immutable.fromJS(casos))
 
 
                 state = state

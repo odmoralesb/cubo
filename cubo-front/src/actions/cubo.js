@@ -37,14 +37,6 @@ export function inicializarCubo() {
 	}
 }
 
-/* 
-export function inicializarOperaciones() {
-	return (dispatch) => {
-        const fn0 = (d) => d({ type: types.INICIALIZAR_OPERACIONES })
-		fn0(dispatch)
-	}
-}
- */
 
 
 export function inicializarOperaciones() {
@@ -53,6 +45,8 @@ export function inicializarOperaciones() {
 		const { dimension, operaciones } = getState().cubo.toJS()	
 
 		dispatch({type: types.INICIALIZAR_OPERACIONES})
+
+		dispatch(escribirEntrada())
 
 		if (dimension < 1) {
 			dispatch(updateInputs('operacion_deshabilitada', true))
@@ -79,8 +73,7 @@ export function inicializarOperaciones() {
 			return			
 		}
 
-		dispatch(escribirEntrada())
-
+		dispatch(abrirCaso())
 
 
 	}
@@ -89,36 +82,53 @@ export function inicializarOperaciones() {
 
 export function abrirCaso() {
 	return (dispatch) => {
-
-		const fn0 = (d) => d({ type: types.ABRIR_CASO })
-		const fn1 = (d) => d({ type: types.ESCRIBIR_ENTRADA })		
-
-		fn0(dispatch)
-		fn1(dispatch)
-
+		dispatch({ type: types.ABRIR_CASO })
+		dispatch(escribirEntrada())
 	}
 }
+
+
 
 
 
 export function ejecutarUpdate() {
 	return (dispatch, getState) => {
 
+		const { x, y, z, W } = getState().cubo.toJS()
 
-		const { x, y, z, W } = getState().cubo.toJS()	
 
-		const fn0 = (d) => d({ 
+		if (x < 1) {
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'x debe ser mayor de 0'})
+			return
+		}
+
+		if (y < 1) {
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y debe ser mayor de 0'})
+			return
+		}
+
+		if (z < 1) {
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'z debe ser mayor de 0'})
+			return
+		}
+
+		if (W == null) {
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'W debe ser un valor numerico'})
+			return
+		}
+
+
+		dispatch({ 
 			type: types.EJECUTAR_OPERACION, 
 			payload: {
 				operacion: 'UPDATE',
 				x, y, z, W
 			} 
 		})
-		
-		const fn1 = (d) => d({ type: types.ESCRIBIR_ENTRADA })		
-		
-		fn0(dispatch)
-		fn1(dispatch)
+
+		dispatch(escribirEntrada())
+
+
 	}
 }
 
