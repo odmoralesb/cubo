@@ -17,9 +17,7 @@ import {
 
 class Contenido extends Component {
 
-    handle_query = () => {
-        this.props.ejecutarQuery()
-    }
+
 
 
 	render() {
@@ -381,7 +379,7 @@ class Contenido extends Component {
                                                 className="btn btn-primary font-btn" 
                                                 style={{width:'100%'}} 
                                                 disabled={cubo.get('operacion_deshabilitada')}
-                                                onClick = { () => this.handle_query() }
+                                                onClick = { () => this.props.ejecutarQuery() }
                                             >
                                                 QUERY
                                             </button>

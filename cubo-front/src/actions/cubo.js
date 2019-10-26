@@ -4,12 +4,15 @@ import * as types from './types'
 
 import { mostrarMensaje } from './layout'
 
-
-
 export function updateInputs(path, value) {
 	return (dispatch) => {
-        const fn0 = (d) => d({ type: types.MODIFICAR_INPUTS, payload: { path, value } })
-		fn0(dispatch)
+		dispatch({ 
+			type: types.MODIFICAR_INPUTS, 
+			payload: { 
+				path, 
+				value: (value == '') ? null : value 
+			} 
+		})
 	}
 }
 
@@ -102,6 +105,7 @@ export function ejecutarUpdate() {
 			return
 		}
 
+
 		if (y < 1) {
 			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y debe ser mayor de 0'})
 			return
@@ -114,6 +118,18 @@ export function ejecutarUpdate() {
 
 		if (W == null) {
 			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'W debe ser un valor numerico'})
+			return
+		}
+
+
+		if (W < Math.pow(-10, 9)) {
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'W debe ser mayor que -1.000.000.000'})
+			return
+		}
+
+
+		if (W > Math.pow(10, 9)) {
+			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'W debe ser menor que 1.000.000.000'})
 			return
 		}
 
@@ -133,30 +149,57 @@ export function ejecutarUpdate() {
 }
 
 
+
 export function ejecutarQuery() {
+	
+		return (dispatch, getState) => {
+	
+			const { x1, y1, z1, x2, y2, z2 } = getState().cubo.toJS()
 
-	return (dispatch, getState) => {
+			if (x1 < 1) {
+				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'x1 debe ser mayor de 0'})
+				return
+			}
+	
+			if (y1 < 1) {
+				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y1 debe ser mayor de 0'})
+				return
+			}
 
-		const { x1, y1, z1, x2, y2, z2 } = getState().cubo.toJS()
+			if (z1 < 1) {
+				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'z1 debe ser mayor de 0'})
+				return
+			}
 
-		const fn0 = (d) => d({ 
-			type: types.EJECUTAR_OPERACION, 
-			payload: {
-				operacion: 'QUERY',
-				x1, y1, z1, x2, y2, z2
-			} 
-		})
 
-		const fn1 = (d) => d({ type: types.ESCRIBIR_ENTRADA })		
+			if (x2 < 1) {
+				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'x2 debe ser mayor de 0'})
+				return
+			}
+	
+			if (y2 < 1) {
+				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y2 debe ser mayor de 0'})
+				return
+			}
 
-		fn0(dispatch)
-		fn1(dispatch)
+			if (z2 < 1) {
+				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'z2 debe ser mayor de 0'})
+				return
+			}
 
+
+			dispatch({ 
+				type: types.EJECUTAR_OPERACION, 
+				payload: {
+					operacion: 'QUERY',
+					x1, y1, z1, x2, y2, z2
+				}
+			})
+	
+			dispatch(escribirEntrada())
+	
+		}
 	}
-}
-
-
-
 
 
 export function escribirEntrada() {
