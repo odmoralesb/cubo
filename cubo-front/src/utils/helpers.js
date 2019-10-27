@@ -10,9 +10,12 @@ export function createAxiosInstance(config) {
     let minConfig = {
         baseURL: API_URL
     }
+    
     if (config) {
-        minConfig = { ...minConfig, ...config }
+        minConfig = { ...minConfig, ...config }        
+
     }
+
 
     return axios.create(minConfig)
 }

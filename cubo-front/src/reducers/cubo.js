@@ -11,153 +11,170 @@ const INITIAL_STATE = Immutable.fromJS({
     x: null, y: null, z: null, W: null,
     x1: null, y1: null, z1: null,
     x2: null, y2: null, z2: null,
-    cubo: [],
+    registro: {
+        N: null,
+        items: []        
+    },
     caso_deshabilitado: true,
     operacion_deshabilitada: true,
     entrada: {
         casos: []
     },
     entrada_txt: null,
-    error: null
+    salida_txt: ''
 })
+
+
 
 export default function (state = INITIAL_STATE, action) {
 
-    let index
+    let index, txt
 
     switch (action.type) {
 
 
         case types.MODIFICAR_INPUTS:
-                state = state.setIn(`${action.payload.path}`.split('.'), Immutable.fromJS(action.payload.value))
-                return state
+            state = state.setIn(`${action.payload.path}`.split('.'), Immutable.fromJS(action.payload.value))
+            return state
 
         case types.INICIALIZAR_CUBO:
 
-                state = state.set('caso_deshabilitado', false)
-                
-                state = state.set('caso_actual', 1)
+            state = state.set('caso_deshabilitado', false)
+            
+            state = state.set('caso_actual', 1)
 
-                state = state.set('cubo', INITIAL_STATE.get('cubo'))
+            state = state.set('payload', INITIAL_STATE.get('registro'))
 
-                state = state.setIn(['entrada', 'casos'], Immutable.fromJS([]))
+            state = state.setIn(['entrada', 'casos'], Immutable.fromJS([]))
 
-                state = state
-                        .set('dimension', INITIAL_STATE.get('dimension'))
-                        .set('operaciones', INITIAL_STATE.get('operaciones'))
+            state = state
+                    .set('dimension', INITIAL_STATE.get('dimension'))
+                    .set('operaciones', INITIAL_STATE.get('operaciones'))
 
-                state = state
-                        .set('x', INITIAL_STATE.get('x'))
-                        .set('y', INITIAL_STATE.get('y'))
-                        .set('z', INITIAL_STATE.get('z'))
-                        .set('W', INITIAL_STATE.get('W'))
+            state = state
+                    .set('x', INITIAL_STATE.get('x'))
+                    .set('y', INITIAL_STATE.get('y'))
+                    .set('z', INITIAL_STATE.get('z'))
+                    .set('W', INITIAL_STATE.get('W'))
 
-                state = state
-                        .set('x1', INITIAL_STATE.get('x1'))
-                        .set('y1', INITIAL_STATE.get('y1'))
-                        .set('z1', INITIAL_STATE.get('z1'))
+            state = state
+                    .set('x1', INITIAL_STATE.get('x1'))
+                    .set('y1', INITIAL_STATE.get('y1'))
+                    .set('z1', INITIAL_STATE.get('z1'))
 
-                state = state
-                        .set('x2', INITIAL_STATE.get('x2'))
-                        .set('y2', INITIAL_STATE.get('y2'))
-                        .set('z2', INITIAL_STATE.get('z2'))
+            state = state
+                    .set('x2', INITIAL_STATE.get('x2'))
+                    .set('y2', INITIAL_STATE.get('y2'))
+                    .set('z2', INITIAL_STATE.get('z2'))
 
-                state = state.set('operacion_deshabilitada', INITIAL_STATE.get('operacion_deshabilitada'))  
-                
-                state = state.set('tipo_operacion', INITIAL_STATE.get('tipo_operacion')) 
+            state = state.set('operacion_deshabilitada', INITIAL_STATE.get('operacion_deshabilitada'))  
+            
+            state = state.set('tipo_operacion', INITIAL_STATE.get('tipo_operacion')) 
 
-                state = state.set('entrada_txt', INITIAL_STATE.get('entrada_txt'))
+            state = state.set('entrada_txt', INITIAL_STATE.get('entrada_txt'))
 
-                return state
+            return state
 
 
         case types.INICIALIZAR_OPERACIONES:
 
-                let casos = state.getIn(['entrada', 'casos']).toJS()
-                casos = casos.splice(state.get('caso_actual'))
-                state = state.setIn(['entrada', 'casos'], Immutable.fromJS(casos))
+            let casos = state.getIn(['entrada', 'casos']).toJS()
+            casos = casos.splice(state.get('caso_actual'))
+            state = state.setIn(['entrada', 'casos'], Immutable.fromJS(casos))
 
+            state = state.setIn(['registro', 'N'], state.get('dimension'))
 
-                state = state
-                        .set('x', INITIAL_STATE.get('x'))
-                        .set('y', INITIAL_STATE.get('y'))
-                        .set('z', INITIAL_STATE.get('z'))
-                        .set('W', INITIAL_STATE.get('W'))
+            state = state
+                    .set('x', INITIAL_STATE.get('x'))
+                    .set('y', INITIAL_STATE.get('y'))
+                    .set('z', INITIAL_STATE.get('z'))
+                    .set('W', INITIAL_STATE.get('W'))
 
-                state = state
-                        .set('x1', INITIAL_STATE.get('x1'))
-                        .set('y1', INITIAL_STATE.get('y1'))
-                        .set('z1', INITIAL_STATE.get('z1'))
+            state = state
+                    .set('x1', INITIAL_STATE.get('x1'))
+                    .set('y1', INITIAL_STATE.get('y1'))
+                    .set('z1', INITIAL_STATE.get('z1'))
 
-                state = state
-                        .set('x2', INITIAL_STATE.get('x2'))
-                        .set('y2', INITIAL_STATE.get('y2'))
-                        .set('z2', INITIAL_STATE.get('z2'))
+            state = state
+                    .set('x2', INITIAL_STATE.get('x2'))
+                    .set('y2', INITIAL_STATE.get('y2'))
+                    .set('z2', INITIAL_STATE.get('z2'))
 
-                return state
+            return state
 
 
 
         case types.ABRIR_CASO:
 
-                index = (Number(state.get('caso_actual'))-1)
-                state = state.set('operacion_deshabilitada', false)
-                state = state.setIn(['entrada', 'casos', index, 'N'], Number(state.get('dimension')))
-                state = state.setIn(['entrada', 'casos', index, 'M'], Number(state.get('operaciones')))
-                state = state.setIn(['entrada', 'casos', index, 'operaciones'], Immutable.fromJS([]))
+            index = (Number(state.get('caso_actual'))-1)
+            state = state.set('operacion_deshabilitada', false)
+            state = state.setIn(['entrada', 'casos', index, 'N'], Number(state.get('dimension')))
+            state = state.setIn(['entrada', 'casos', index, 'M'], Number(state.get('operaciones')))
+            state = state.setIn(['entrada', 'casos', index, 'operaciones'], Immutable.fromJS([]))
 
-                return state
+            return state
 
 
         case types.EJECUTAR_OPERACION:
 
-                const operacion = Immutable.fromJS(action.payload)
+            const operacion = Immutable.fromJS(action.payload.entrada)
 
-                const casoidx = (Number(state.get('caso_actual'))-1)
+            const casoidx = (Number(state.get('caso_actual'))-1)
 
-                const operaciones = state.getIn(['entrada', 'casos', casoidx, 'operaciones']).push(operacion)                
+            const operaciones = state.getIn(['entrada', 'casos', casoidx, 'operaciones']).push(operacion)                
 
-                state = state.setIn(['entrada', 'casos', casoidx, 'operaciones'], operaciones)
+            state = state.setIn(['entrada', 'casos', casoidx, 'operaciones'], operaciones)
 
-                return state
+            state = state.set('registro', Immutable.fromJS(action.payload.registro))
 
-
-
+            return state
 
 
         case types.ESCRIBIR_ENTRADA:
 
-                var txt = ''
+            txt = ''
 
-                txt += state.get('numero_casos') + '\r\n'
+            txt += state.get('numero_casos') + '\r\n'
 
-                state.getIn(['entrada', 'casos']).map(caso => {
+            state.getIn(['entrada', 'casos']).map(caso => {
 
-                        txt += `${caso.get('N')} ${caso.get('M')}` + '\r\n'
+                txt += `${caso.get('N')} ${caso.get('M')}` + '\r\n'
 
-                        caso.get('operaciones').map(linea => {
+                caso.get('operaciones').map(linea => {
 
-                                switch(linea.get('operacion')) {
+                        switch(linea.get('operacion')) {
 
-                                        case 'UPDATE':
-                                                txt += `UPDATE ${linea.get('x')} ${linea.get('y')} ${linea.get('z')} ${linea.get('W')}` + '\r\n'
-                                        break
+                            case 'UPDATE':
+                                    txt += `UPDATE ${linea.get('x')} ${linea.get('y')} ${linea.get('z')} ${linea.get('W')}` + '\r\n'
+                            break
 
-                                        case 'QUERY':
-                                                txt += `QUERY ${linea.get('x1')} ${linea.get('y1')} ${linea.get('z1')} ${linea.get('x2')} ${linea.get('y2')} ${linea.get('z2')}` + '\r\n'
-                                        break
-                                }
-                        })
+                            case 'QUERY':
+                                    txt += `QUERY ${linea.get('x1')} ${linea.get('y1')} ${linea.get('z1')} ${linea.get('x2')} ${linea.get('y2')} ${linea.get('z2')}` + '\r\n'
+                            break
+                        }
                 })
-                
-                state = state.set('entrada_txt', txt)
+            })
+            
+            state = state.set('entrada_txt', txt)
 
-                return state
+            return state
 
 
+        case types.ESCRIBIR_SALIDA:
+
+            txt = state.get('salida_txt')
+
+            txt += action.payload.salida + '\r\n'
+            
+            state = state.set('salida_txt', txt)
+
+            return state
 
 
         default:
-                return state
+            return state
+
+
+
     }
 }

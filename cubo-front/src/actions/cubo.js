@@ -1,3 +1,5 @@
+import { API_URL } from '.'
+
 import { createAxiosInstance } from '../utils/helpers'
 
 import * as types from './types'
@@ -95,9 +97,13 @@ export function abrirCaso() {
 
 
 export function ejecutarUpdate() {
+
+    const axios = createAxiosInstance()
+
+
 	return (dispatch, getState) => {
 
-		const { x, y, z, W } = getState().cubo.toJS()
+		const { x, y, z, W, registro } = getState().cubo.toJS()
 
 
 		if (x < 1) {
@@ -131,18 +137,42 @@ export function ejecutarUpdate() {
 		if (W > Math.pow(10, 9)) {
 			mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'W debe ser menor que 1.000.000.000'})
 			return
-		}
+        }
 
 
-		dispatch({ 
-			type: types.EJECUTAR_OPERACION, 
-			payload: {
-				operacion: 'UPDATE',
-				x, y, z, W
-			} 
-		})
+        const payload = {
+            x, y, z, W, registro
+        }
 
-		dispatch(escribirEntrada())
+        axios.post(`${API_URL}/update`, payload)
+        .then(res => {	
+            
+            
+            const data = res.data
+
+            dispatch({ 
+                type: types.EJECUTAR_OPERACION, 
+                payload: {
+                    entrada: {operacion: 'UPDATE', x, y, z, W },
+                    registro: res.data
+                } 
+            })
+    
+            dispatch(escribirEntrada())
+
+            mostrarMensaje(dispatch, {tipo: 'success', descripcion: res.data.mensaje})
+
+
+        })
+        .catch(err => {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: err.message})
+        })
+
+
+
+
+
+
 
 
 	}
@@ -151,60 +181,96 @@ export function ejecutarUpdate() {
 
 
 export function ejecutarQuery() {
+
+
+    const axios = createAxiosInstance()
 	
-		return (dispatch, getState) => {
-	
-			const { x1, y1, z1, x2, y2, z2 } = getState().cubo.toJS()
+    return (dispatch, getState) => {
 
-			if (x1 < 1) {
-				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'x1 debe ser mayor de 0'})
-				return
-			}
-	
-			if (y1 < 1) {
-				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y1 debe ser mayor de 0'})
-				return
-			}
+        const { x1, y1, z1, x2, y2, z2, registro } = getState().cubo.toJS()
 
-			if (z1 < 1) {
-				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'z1 debe ser mayor de 0'})
-				return
-			}
+        if (x1 < 1) {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'x1 debe ser mayor de 0'})
+            return
+        }
 
+        if (y1 < 1) {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y1 debe ser mayor de 0'})
+            return
+        }
 
-			if (x2 < 1) {
-				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'x2 debe ser mayor de 0'})
-				return
-			}
-	
-			if (y2 < 1) {
-				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y2 debe ser mayor de 0'})
-				return
-			}
-
-			if (z2 < 1) {
-				mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'z2 debe ser mayor de 0'})
-				return
-			}
+        if (z1 < 1) {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'z1 debe ser mayor de 0'})
+            return
+        }
 
 
-			dispatch({ 
-				type: types.EJECUTAR_OPERACION, 
-				payload: {
-					operacion: 'QUERY',
-					x1, y1, z1, x2, y2, z2
-				}
-			})
-	
-			dispatch(escribirEntrada())
-	
-		}
+        if (x2 < 1) {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'x2 debe ser mayor de 0'})
+            return
+        }
+
+        if (y2 < 1) {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'y2 debe ser mayor de 0'})
+            return
+        }
+
+        if (z2 < 1) {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: 'z2 debe ser mayor de 0'})
+            return
+        }
+
+
+        const payload = {
+            x1, y1, z1, x2, y2, z2, registro
+        }
+
+
+        axios.post(`${API_URL}/query`, payload)
+        .then(res => {	
+            
+            
+            const data = res.data
+
+            dispatch({ 
+                type: types.EJECUTAR_OPERACION, 
+                payload: {
+                    entrada: {operacion: 'QUERY', x1, y1, z1, x2, y2, z2 },
+                    registro
+                } 
+            })
+    
+            dispatch(escribirEntrada())
+
+            dispatch(escribirSalida(res.data.sumatoria))
+
+            mostrarMensaje(dispatch, {tipo: 'success', descripcion: res.data.mensaje})
+
+
+        })
+        .catch(err => {
+            mostrarMensaje(dispatch, {tipo: 'danger', descripcion: err.message})
+        })
+
+
+
+
+    }
 	}
 
 
 export function escribirEntrada() {
 	return (dispatch) => {
         const fn0 = (d) => d({ type: types.ESCRIBIR_ENTRADA })
+		fn0(dispatch)
+	}
+}
+
+
+
+export function escribirSalida(salida) {
+	return (dispatch) => {
+        const fn0 = (d) => d({ type: types.ESCRIBIR_SALIDA, payload: { salida } })
 		fn0(dispatch)
 	}
 }

@@ -413,7 +413,7 @@ class Contenido extends Component {
                         <Card>
                             <Card.Header>Salida</Card.Header>
                             <Card.Body>
-                                <textarea rows={4} style={{width:'100%'}} />
+                                <textarea rows={4} style={{width:'100%'}} value={ cubo.get('salida_txt') || '' } readOnly  />
                             </Card.Body>
                         </Card>
                     </div>
