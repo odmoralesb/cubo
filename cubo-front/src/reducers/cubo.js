@@ -16,6 +16,7 @@ const INITIAL_STATE = Immutable.fromJS({
         items: []        
     },
     caso_deshabilitado: true,
+    caso_abierto: true,
     operacion_deshabilitada: true,
     entrada: {
         casos: []
@@ -28,7 +29,7 @@ const INITIAL_STATE = Immutable.fromJS({
 
 export default function (state = INITIAL_STATE, action) {
 
-    let index, txt
+    let index, txt, casos
 
     switch (action.type) {
 
@@ -40,6 +41,8 @@ export default function (state = INITIAL_STATE, action) {
         case types.INICIALIZAR_CUBO:
 
             state = state.set('caso_deshabilitado', false)
+
+            state = state.set('caso_abierto', false)
             
             state = state.set('caso_actual', 1)
 
@@ -73,16 +76,17 @@ export default function (state = INITIAL_STATE, action) {
 
             state = state.set('entrada_txt', INITIAL_STATE.get('entrada_txt'))
 
+            state = state.set('salida_txt', INITIAL_STATE.get('salida_txt'))
+
             return state
 
 
         case types.INICIALIZAR_OPERACIONES:
 
-            let casos = state.getIn(['entrada', 'casos']).toJS()
-            casos = casos.splice(state.get('caso_actual'))
-            state = state.setIn(['entrada', 'casos'], Immutable.fromJS(casos))
 
-            state = state.setIn(['registro', 'N'], state.get('dimension'))
+            casos = state.getIn(['entrada', 'casos']).toJS()
+            casos = casos.splice(0, state.get('caso_actual'))
+            state = state.setIn(['entrada', 'casos'], Immutable.fromJS(casos))
 
             state = state
                     .set('x', INITIAL_STATE.get('x'))
@@ -100,6 +104,8 @@ export default function (state = INITIAL_STATE, action) {
                     .set('y2', INITIAL_STATE.get('y2'))
                     .set('z2', INITIAL_STATE.get('z2'))
 
+                    
+
             return state
 
 
@@ -112,22 +118,69 @@ export default function (state = INITIAL_STATE, action) {
             state = state.setIn(['entrada', 'casos', index, 'M'], Number(state.get('operaciones')))
             state = state.setIn(['entrada', 'casos', index, 'operaciones'], Immutable.fromJS([]))
 
+            state = state.setIn(['registro', 'N'], state.get('dimension'))
+            state = state.setIn(['registro', 'items'], Immutable.fromJS([]))
+            state = state.set('caso_abierto', true)
+
             return state
 
 
         case types.EJECUTAR_OPERACION:
 
-            const operacion = Immutable.fromJS(action.payload.entrada)
+            index = (Number(state.get('caso_actual'))-1)
 
-            const casoidx = (Number(state.get('caso_actual'))-1)
+            const operacion = Immutable.fromJS(action.payload.entrada)            
 
-            const operaciones = state.getIn(['entrada', 'casos', casoidx, 'operaciones']).push(operacion)                
+            const operaciones = state.getIn(['entrada', 'casos', index, 'operaciones']).push(operacion)                
 
-            state = state.setIn(['entrada', 'casos', casoidx, 'operaciones'], operaciones)
+            state = state.setIn(['entrada', 'casos', index, 'operaciones'], operaciones)
 
             state = state.set('registro', Immutable.fromJS(action.payload.registro))
 
+            const operaciones_max = state.getIn(['entrada', 'casos', index, 'M'])
+
+            const operaciones_cant = state.getIn(['entrada', 'casos', index, 'operaciones']).count()
+
+            if (operaciones_cant >= operaciones_max) {
+
+                state = state.set('caso_actual', state.get('caso_actual') + 1)
+
+
+                state = state
+                        .set('dimension', INITIAL_STATE.get('dimension'))
+                        .set('operaciones', INITIAL_STATE.get('operaciones'))
+
+
+                state = state.set('caso_abierto', false)
+
+                state = state
+                        .set('x', INITIAL_STATE.get('x'))
+                        .set('y', INITIAL_STATE.get('y'))
+                        .set('z', INITIAL_STATE.get('z'))
+                        .set('W', INITIAL_STATE.get('W'))
+
+                state = state
+                        .set('x1', INITIAL_STATE.get('x1'))
+                        .set('y1', INITIAL_STATE.get('y1'))
+                        .set('z1', INITIAL_STATE.get('z1'))
+
+                state = state
+                        .set('x2', INITIAL_STATE.get('x2'))
+                        .set('y2', INITIAL_STATE.get('y2'))
+                        .set('z2', INITIAL_STATE.get('z2'))
+
+                state = state.set('operacion_deshabilitada', INITIAL_STATE.get('operacion_deshabilitada'))  
+                
+                state = state.set('tipo_operacion', INITIAL_STATE.get('tipo_operacion')) 
+                
+
+
+
+            }
+
+
             return state
+
 
 
         case types.ESCRIBIR_ENTRADA:
@@ -142,16 +195,16 @@ export default function (state = INITIAL_STATE, action) {
 
                 caso.get('operaciones').map(linea => {
 
-                        switch(linea.get('operacion')) {
+                    switch(linea.get('operacion')) {
 
-                            case 'UPDATE':
-                                    txt += `UPDATE ${linea.get('x')} ${linea.get('y')} ${linea.get('z')} ${linea.get('W')}` + '\r\n'
-                            break
+                        case 'UPDATE':
+                                txt += `UPDATE ${linea.get('x')} ${linea.get('y')} ${linea.get('z')} ${linea.get('W')}` + '\r\n'
+                        break
 
-                            case 'QUERY':
-                                    txt += `QUERY ${linea.get('x1')} ${linea.get('y1')} ${linea.get('z1')} ${linea.get('x2')} ${linea.get('y2')} ${linea.get('z2')}` + '\r\n'
-                            break
-                        }
+                        case 'QUERY':
+                                txt += `QUERY ${linea.get('x1')} ${linea.get('y1')} ${linea.get('z1')} ${linea.get('x2')} ${linea.get('y2')} ${linea.get('z2')}` + '\r\n'
+                        break
+                    }
                 })
             })
             

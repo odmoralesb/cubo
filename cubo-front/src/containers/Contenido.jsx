@@ -77,7 +77,7 @@ class Contenido extends Component {
                                                 placeholder="Dimension" 
                                                 value={cubo.get('dimension')||''}
                                                 onChange={(e) => this.props.updateInputs('dimension', e.target.value) }
-                                                disabled={cubo.get('caso_deshabilitado')}                                        
+                                                disabled={cubo.get('caso_deshabilitado')||cubo.get('caso_abierto')}                                        
                                             />
                                         </div>
                                     </div>
@@ -93,7 +93,7 @@ class Contenido extends Component {
                                                 placeholder="Operaciones" 
                                                 value={cubo.get('operaciones')||''}
                                                 onChange={(e) => this.props.updateInputs('operaciones', e.target.value) }
-                                                disabled={cubo.get('caso_deshabilitado')}
+                                                disabled={cubo.get('caso_deshabilitado')||cubo.get('caso_abierto')}
                                             />
                                         </div>
                                     </div>
